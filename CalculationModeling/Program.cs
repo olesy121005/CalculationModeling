@@ -1,3 +1,5 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using CalculationModeling.Data;
 using CalculationModeling.Services;
 using CalculationModeling.Data;
@@ -13,7 +15,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IHeatExchangeCalculator, HeatExchangeCalculator>();
 
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var cultures = new[]
+    {
+        new CultureInfo("ru-RU"),
+        new CultureInfo("en-US")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("ru-RU");
+    options.SupportedCultures = cultures;
+    options.SupportedUICultures = cultures;
+});
+
 var app = builder.Build();
+
+app.UseRequestLocalization();
+
 
 if (!app.Environment.IsDevelopment())
 {
