@@ -20,8 +20,6 @@ namespace CalculationModeling.Services
 
             double denominator = 1 - m * Math.Exp(((m - 1) * Y0) / m);
 
-            int id = 1;
-
             for (double y = 0; y <= parameters.LayerHeightValue; y += 0.5)
             {
                 double Y = (parameters.HeatTransferCoefficientValue * y) /
@@ -42,14 +40,14 @@ namespace CalculationModeling.Services
 
                 results.Add(new CalculationResult
                 {
-                    Id = id++,
+                    // ❗ Id НЕ УКАЗЫВАЕМ
                     CoordinateY = Math.Round(y, 1),
                     RelativeHeight = Math.Round(Y, 2),
                     Theta1 = Math.Round(theta1, 4),
                     Theta2 = Math.Round(theta2, 4),
                     MaterialTemp = Math.Round(materialTemp, 2),
                     GasTemp = Math.Round(gasTemp, 2),
-                    TempDifference = Math.Round(Math.Abs(materialTemp - gasTemp), 2),
+                    TempDifference = Math.Round(materialTemp - gasTemp, 2),
                     Parameters = parameters
                 });
             }
