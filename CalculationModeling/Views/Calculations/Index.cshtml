@@ -1,0 +1,23 @@
+﻿@model IEnumerable<CalculationModeling.Models.CalculationParameters>
+
+<h2>Расчёты</h2>
+<a class="btn btn-success" href="/Calculations/Create">Новый расчёт</a>
+
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>Название</th>
+        <th>Действия</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CalculationName</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="/Calculations/Details/@item.Id">📊</a>
+                <a class="btn btn-warning btn-sm" href="/Calculations/Edit/@item.Id">✏️</a>
+                <a class="btn btn-danger btn-sm" href="/Calculations/Delete/@item.Id">❌</a>
+            </td>
+
+        </tr>
+    }
+</table>

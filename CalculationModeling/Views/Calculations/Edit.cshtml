@@ -1,0 +1,42 @@
+﻿@model CalculationModeling.Models.CalculationParameters
+
+<h2>Редактирование</h2>
+
+<div class="card p-4">
+    <form method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <label>Название расчёта</label>
+        <input asp-for="CalculationName" class="form-control" />
+
+        <label>Высота слоя</label>
+        <input asp-for="LayerHeightValue" step="0.5" class="form-control" />
+
+        <label>Начальная температура материала</label>
+        <input asp-for="InitialMaterialTempValue" class="form-control" />
+
+        <label>Начальная температура газа</label>
+        <input asp-for="InitialGasTempValue" class="form-control" />
+
+        <label>Скорость газа</label>
+        <input asp-for="GasVelocityValue" class="form-control" />
+
+        <label>Теплоемкость газа</label>
+        <input asp-for="GasHeatCapacityValue" class="form-control" />
+
+        <label>Расход материала</label>
+        <input asp-for="MaterialConsumptionValue" class="form-control" />
+
+        <label>Теплоемкость материала</label>
+        <input asp-for="MaterialHeatCapacityValue" class="form-control" />
+
+        <label>Коэффициент теплоотдачи</label>
+        <input asp-for="HeatTransferCoefficientValue" class="form-control" />
+
+        <label>Диаметр аппарата</label>
+        <input asp-for="ApparatusDiameterValue" class="form-control" />
+
+        <button class="btn btn-primary mt-3">💾 Сохранить</button>
+        <a class="btn btn-secondary mt-3" href="/Calculations">Назад</a>
+    </form>
+</div>

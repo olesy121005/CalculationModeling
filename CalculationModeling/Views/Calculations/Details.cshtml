@@ -1,0 +1,188 @@
+﻿@model CalculationModeling.Models.CalculationViewModel
+
+<h2 class="mb-3">
+    Результаты расчёта: @Model.Parameters.CalculationName
+</h2>
+
+<div class="card p-3 mb-4">
+
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>Параметры</th>
+                @foreach (var r in Model.Results)
+                {
+                    <th>@r.CoordinateY</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Относительная высота Y</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.RelativeHeight</td>
+                }
+            </tr>
+
+            <tr>
+                <th>θ₁</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.Theta1</td>
+                }
+            </tr>
+
+            <tr>
+                <th>θ₂</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.Theta2</td>
+                }
+            </tr>
+
+            <tr>
+                <th>Темп. материала, °C</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.MaterialTemp</td>
+                }
+            </tr>
+
+            <tr>
+                <th>Темп. газа, °C</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.GasTemp</td>
+                }
+            </tr>
+
+            <tr>
+                <th>Разность температур, °C</th>
+                @foreach (var r in Model.Results)
+                {
+                    <td>@r.TempDifference</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<!-- ГРАФИКИ -->
+<div class="card p-3">
+    <canvas id="tempChart"></canvas>
+</div>
+
+<div class="card p-3 mt-4">
+    <canvas id="deltaChart"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const labels = @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                            Model.Results.Select(x => x.CoordinateY)
+                    )
+            );
+
+    const materialTemp = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                        Model.Results.Select(x => x.MaterialTemp)
+                )
+        );
+
+    const gasTemp = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                        Model.Results.Select(x => x.GasTemp)
+                )
+        );
+
+    const deltaTemp = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                        Model.Results.Select(x => x.TempDifference)
+                )
+        );
+
+    // График температур
+    new Chart(document.getElementById('tempChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Температура материала, °C',
+                    data: materialTemp,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Температура газа, °C',
+                    data: gasTemp,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Изменение температур по высоте слоя'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Высота слоя, м'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Температура, °C'
+                    }
+                }
+            }
+        }
+    });
+
+        // График разности температур
+        new Chart(document.getElementById('deltaChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Разность температур ΔT, °C',
+                        data: deltaTemp,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Разность температур материала и газа'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Высота слоя, м'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'ΔT, °C'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
